@@ -22,7 +22,7 @@ const NewTransaction = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Button>New Transaction</Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
@@ -34,13 +34,13 @@ const NewTransaction = () => {
             <Label htmlFor="name" className="text-right">
               Descrição
             </Label>
-            <Input id="name"  className="col-span-3" />
+            <Input id="name" className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="username" className="text-right">
               Valor
             </Label>
-            <Input id="username"  className="col-span-3" />
+            <Input id="username" className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="username" className="text-right">
