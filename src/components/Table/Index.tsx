@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 
 import {
   Table,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 import {
   Sheet,
@@ -17,16 +17,41 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import NewTransaction from '../NewTransaction/Index'
+} from "@/components/ui/sheet";
+import NewTransaction from '../NewTransaction/Index';
 
+// Defina uma interface para os dados da transação
+interface Transaction {
+  id: number; // Ajuste o tipo conforme o seu modelo
+  description: string;
+  value: number;
+  type: string;
+  date: string; // Considerando que a data vem como string ISO
+}
 
-const TableTransaction = () => {
+const TableTransaction: React.FC = () => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    // Fetch data from API when the component is mounted
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5051/modeltransaction');
+        const data: Transaction[] = await response.json();
+        setTransactions(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <section className="w-screen  flex flex-col items-center justify-start mt-4">
+    <section className="w-screen flex flex-col items-center justify-start mt-4">
       <div className="w-4/5 flex flex-col">
         <div className="flex justify-between w-full mb-4">
-
           <div></div>
           <NewTransaction />
         </div>
@@ -41,35 +66,27 @@ const TableTransaction = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">Lanche</TableCell>
-              <TableCell>10R$</TableCell>
-              <TableCell>Incomed</TableCell>
-              <TableCell className="text-right">20/08/2024</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Lanche</TableCell>
-              <TableCell>10R$</TableCell>
-              <TableCell>Incomed</TableCell>
-              <TableCell className="text-right">20/08/2024</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Lanche</TableCell>
-              <TableCell>10R$</TableCell>
-              <TableCell>Incomed</TableCell>
-              <TableCell className="text-right">20/08/2024</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Lanche</TableCell>
-              <TableCell>10R$</TableCell>
-              <TableCell>Incomed</TableCell>
-              <TableCell className="text-right">20/08/2024</TableCell>
-            </TableRow>
+            {transactions.length > 0 ? (
+              transactions.map((transaction) => (
+                <TableRow key={transaction.id}>
+                  <TableCell className="font-medium">{transaction.description}</TableCell>
+                  <TableCell>
+                    {transaction.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                  </TableCell>
+                  <TableCell>{transaction.type}</TableCell>
+                  <TableCell className="text-right">{new Date(transaction.date).toLocaleDateString('pt-BR')}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center">Nenhuma transação encontrada</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default TableTransaction
+export default TableTransaction;
