@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import { FetchShareApiContext } from '@/context/FetchShareApi';
+import React, { useState, useEffect, useContext } from 'react'
 import { IoArrowUpCircleOutline, IoArrowDownCircleOutline } from "react-icons/io5";
 import { TfiMoney } from "react-icons/tfi";
 
@@ -7,6 +8,11 @@ const Total = () => {
     const [entradas, setEntradas] = useState(0);
     const [saidas, setSaidas] = useState(0);
     const [total, setTotal] = useState(0);
+
+
+
+    const {transactions} = useContext(FetchShareApiContext);        
+    
 
     // Função para buscar os dados da API e calcular as somas
     useEffect(() => {
@@ -34,7 +40,7 @@ const Total = () => {
         };
 
         fetchTransactions();
-    }, [total]); // Executa uma vez ao montar o componente
+    }, [transactions]); // Executa uma vez ao montar o componente
 
     return (
         <section className='w-screen flex items-center justify-center gap-20 p-20 bg-customGrey-50'>

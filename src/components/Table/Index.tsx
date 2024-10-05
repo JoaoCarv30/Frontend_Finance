@@ -1,65 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-
+import React, { useEffect, useState, useContext } from 'react';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import NewTransaction from '../NewTransaction/Index';
 import { CiEdit, CiTrash } from "react-icons/ci";
-
-// Importa as funções da API
-import { FetchApi, Delete, Edit } from '../../Functions/FetchAPi';
 import ToastOk from '../ToastOk/Index';
-
-// Defina uma interface para os dados da transação
-interface Transaction {
-    id: number; // Ajuste o tipo conforme o seu modelo
-    description: string;
-    value: number;
-    type: number;
-    date: string; // Considerando que a data vem como string ISO
-}
+import { FetchShareApiContext } from '@/context/FetchShareApi';
 
 const TableTransaction: React.FC = () => {
-
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [IsDeleted, setIsDeleted] = useState<boolean>(false);
 
-    useEffect(() => {
-        (async () => {
-            const data = await FetchApi();
-            setTransactions(data);
-        })();
-    }, [transactions]);
-
-    // Função para deletar uma transação
-    const HandleDelete = async (id: number) => {
-        try {
-            await Delete(id);
-            // Remove a transação do estado local
-            setTransactions(transactions.filter((transaction) => transaction.id !== id));
-            setIsDeleted(true);
-        } catch (error) {
-            console.error('Erro ao deletar transação:', error);
-            alert('Erro ao deletar a transação.');
-        }
-    };
+    // Extraia as transações e a função HandleDelete do contexto
+    const { transactions, HandleDelete } = useContext(FetchShareApiContext);
 
     const HandleEdit = async (id: number) => {
         try {
-            await Edit(id);
-        
+            // Função de edição...
         } catch (error) {
             console.error('Erro ao editar transação:', error);
             alert('Erro ao editar a transação.');
         }
-        
-
     };
 
     return (
@@ -93,7 +51,6 @@ const TableTransaction: React.FC = () => {
                                     <TableCell>{new Date(transaction.date).toLocaleDateString('pt-BR')}</TableCell>
                                     <TableCell className="font-medium">
                                         <button onClick={() => HandleEdit(transaction.id)}><CiEdit size={30} /></button>
-                                  
                                         <button onClick={() => HandleDelete(transaction.id)}><CiTrash color='red' size={30} /></button>
                                     </TableCell>
                                 </TableRow>
@@ -105,10 +62,8 @@ const TableTransaction: React.FC = () => {
                         )}
                     </TableBody>
                 </Table>
-                </div>
-                {IsDeleted && 
-                    <ToastOk />
-                }
+            </div>
+            {IsDeleted && <ToastOk />}
         </section>
     );
 };
