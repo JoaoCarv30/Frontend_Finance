@@ -1,4 +1,3 @@
-import { FetchApi } from '@/Functions/FetchAPi';
 import React, { useState, useEffect } from 'react'
 import { IoArrowUpCircleOutline, IoArrowDownCircleOutline } from "react-icons/io5";
 import { TfiMoney } from "react-icons/tfi";
@@ -35,7 +34,7 @@ const Total = () => {
         };
 
         fetchTransactions();
-    }, [FetchApi()]); // Executa uma vez ao montar o componente
+    }, [total]); // Executa uma vez ao montar o componente
 
     return (
         <section className='w-screen flex items-center justify-center gap-20 p-20 bg-customGrey-50'>

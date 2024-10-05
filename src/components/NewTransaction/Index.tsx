@@ -7,7 +7,6 @@ import { DatePickerDemo } from '../DatePicker/Index';
 import SelectPicker from '../SelectPicker/Index';
 import { Toast } from '@radix-ui/react-toast';
 import ToastOk from '../ToastOk/Index';
-import { FetchApi } from '@/Functions/FetchAPi';
 
 const NewTransaction: React.FC = () => {
     const [description, setDescription] = useState<string>('');
@@ -35,8 +34,6 @@ const NewTransaction: React.FC = () => {
             if (!response.ok) {
                 throw new Error('Error creating transaction');
             }
-
-
 
             <ToastOk />
         } catch (error) {

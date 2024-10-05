@@ -2,14 +2,19 @@ import React from "react"
 
 import TableTransaction from "../src/components/Table/Index"
 import Total from "./components/Total/Index"
+import { Edit } from "./Functions/FetchAPi"
+
+import FetchShareApiProvider from "./context/FetchShareApi"
 function App() {
 
   return (
 
     <>
 
-      <Total />
-      <TableTransaction />
+        <FetchShareApiProvider>
+          <Total />
+        <TableTransaction />
+        </FetchShareApiProvider>
     </>
 
 
